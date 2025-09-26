@@ -1,0 +1,120 @@
+CREATE SCHEMA `university_db2` ;
+
+USE university_db2;
+
+SHOW TABLES;
+
+CREATE TABLE students (
+student_id INT PRIMARY KEY,
+first_name VARCHAR(50),
+last_name VARCHAR(50),
+address VARCHAR(100),
+phone_number VARCHAR(20),
+email VARCHAR(50),
+date_of_birth DATE
+);
+
+CREATE TABLE courses (
+course_id INT PRIMARY KEY,
+course_name VARCHAR(50),
+instructor_name VARCHAR(50),
+start_time TIME,
+end_time TIME,
+room_number VARCHAR(20),
+UNIQUE KEY unique_class (start_time, end_time, room_number)	
+);
+
+DESCRIBE courses;
+
+CREATE TABLE Enrollment (
+enrollment_id INT PRIMARY KEY,
+student_id INT,
+course_id INT,
+grade CHAR(1),
+FOREIGN KEY (student_id) references students(student_id) ON UPDATE CASCADE ON DELETE CASCADE,
+FOREIGN KEY (course_id) references courses(course_id) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+DESCRIBE Enrollment;
+
+CREATE TABLE schedule (
+student_id INT PRIMARY KEY,
+course_id INT,
+start_time TIME,
+end_time TIME,
+room_number VARCHAR(20),
+FOREIGN KEY (student_id) references students(student_id) ON UPDATE CASCADE ON DELETE CASCADE,
+FOREIGN KEY (course_id) references courses(course_id) ON UPDATE CASCADE ON DELETE CASCADE,
+FOREIGN KEY (start_time, end_time, room_number) references courses (start_time, end_time, room_number)
+ON UPDATE CASCADE ON DELETE CASCADE 
+);
+
+DESCRIBE schedule;
+
+CREATE TABLE department (
+department_id INT PRIMARY KEY,
+department_name VARCHAR (50)
+);
+
+CREATE TABLE professor (
+professor_id INT PRIMARY KEY,
+first_name VARCHAR(20),
+last_name VARCHAR(20),
+address VARCHAR(20),
+phone_number VARCHAR(20),
+email VARCHAR(100)
+);
+
+INSERT INTO students (
+  student_id, first_name, last_name, address, phone_number, email, date_of_birth
+) VALUES (
+  1, 'John', 'Doe', '123 Main St', '555-1234', 'john.doe@example.com', '2000-05-15'
+);
+
+SELECT first_name, last_name
+FROM students;
+
+SELECT *
+FROM students
+WHERE email = 'john.doe@example.com';
+
+SELECT student_id, first_name, last_name, date_of_birth
+FROM students
+WHERE date_of_birth > '2002-01-01';
+
+UPDATE students
+SET phone_number = '555-5678',
+    address = '456 Oak Ave'
+WHERE student_id = 1;
+
+SELECT *
+FROM students
+WHERE last_name = 'Doe';
+
+SELECT student_id, first_name, last_name, phone_number
+FROM students
+WHERE phone_number LIKE '555%';
+
+DELETE FROM students
+WHERE student_id = 2;
+
+SELECT * FROM students;
+
+ALTER TABLE courses
+CHANGE instructor_name instructor_id INT;
+
+ALTER TABLE courses
+ADD FOREIGN KEY (instructor_id) REFERENCES professor(professor_id);
+
+DESCRIBE courses;
+
+ALTER TABLE professor
+ADD departmend_id INT;
+
+ALTER TABLE professor
+ADD FOREIGN KEY (departmend_id) REFERENCES department(department_id);
+
+ALTER TABLE professor
+CHANGE departmend_id department_id INT;
+ 
+DESCRIBE professor;
