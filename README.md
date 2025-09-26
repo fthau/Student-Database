@@ -1,1 +1,2 @@
-# Student-Database
+Developed a Java application with MySQL integration to handle student registration, login authentication, account updates, and deletion using JDBC and prepared statements for secure database interaction.
+Implemented a menu-driven command-line interface with robust SQL query execution and exception handling, improving usability and demonstrating practical skills in CRUD operations, database design, and object-oriented programming.
